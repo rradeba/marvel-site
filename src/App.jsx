@@ -15,7 +15,7 @@ const MoviesList = () => {
   ]);
 
   const [showDescription, setShowDescription] = useState(false);
-  const [showGenre, setShowGenre] = useState('All'); // 'All' or specific genre like 'Action'
+  const [showGenre, setShowGenre] = useState('All'); 
 
   const toggleView = () => {
     setShowDescription(!showDescription);
