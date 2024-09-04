@@ -1,55 +1,165 @@
 import './App.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import md5 from 'md5';
 
-const MoviesList = () => {
-  // Initialize state with a list of movies, their descriptions, and genres
-  const [movies, setMovies] = useState([
-    { title: "Dark Knight", description: "Batman sequel, featuring electric Joker performance by Heath Ledger", genre: 'Action' },
-    { title: "Slumdog Millionaire", description: "A story about an Indian orphan who wins a game show and finds love", genre: 'Drama' },
-    { title: "Shawshank Redemption", description: "The adventures of a falsely imprisoned accountant who breaks free.", genre: 'Drama' },
-    { title: "Interstellar", description: "A riveting film about space exploration", genre: 'Sci-Fi' },
-    { title: "Django Unchained", description: "A Tarantino film about a freed slave searching for his wife.", genre: 'Action' },
-    { title: "Saving Private Ryan", description: "A WW2 action film about a battalion in search of a lost soldier.", genre: 'Action' },
-    { title: "Mad Max: Fury Road", description: "Electric hero film in a desert post-apocalyptic setting.", genre: 'Action' },
-    { title: "Inside Out", description: "Animated film about emotional development as we grow up.", genre: 'Animation' }
-  ]);
+// API keys and configuration
+const publicKey = import.meta.env.VITE_PUBLIC_KEY;
+const privateKey = import.meta.env.VITE_PRIVATE_KEY;
+const timestamp = Date.now();
+const hash = md5(timestamp + privateKey + publicKey);
 
-  const [showDescription, setShowDescription] = useState(false);
-  const [showGenre, setShowGenre] = useState('All'); 
+// Marvel heroes to fetch
+const characterList = [
+  "Iron Man",
+  "Thor",
+  "Captain America",
+  "Black Panther",
+  "Doctor Strange",
+  "Hulk",
+  "Magneto",
+  "Wolverine",
+  "Daredevil"
+];
 
-  const toggleView = () => {
-    setShowDescription(!showDescription);
-  };
+// CharacterDetail component
+const CharacterDetail = ({ character }) => {
+  const [comics, setComics] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const toggleGenre = () => {
-    setShowGenre(showGenre === 'All' ? 'Action' : 'All');
-  };
+  useEffect(() => {
+    const fetchComics = async () => {
+      try {
+        const response = await axios.get(character.comics.collectionURI, {
+          params: {
+            ts: timestamp,
+            apikey: publicKey,
+            hash: hash,
+          }
+        });
+        setComics(response.data.data.results);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching comics:', err);
+        setError(err);
+        setLoading(false);
+      }
+    };
 
-  const removeMovie = (title) => {
-    setMovies(movies.filter(movie => movie.title !== title));
-  };
+    if (character.comics && character.comics.available > 0) {
+      fetchComics();
+    } else {
+      setLoading(false);
+    }
+  }, [character]);
 
-  const filteredMovies = showGenre === 'All' ? movies : movies.filter(movie => movie.genre === showGenre);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div>
-      <button onClick={toggleView}>
-        {showDescription ? 'Show Movies List' : 'Show Movie Descriptions'}
-      </button>
-      <button onClick={toggleGenre}>
-        {showGenre === 'All' ? 'Show Action Movies' : 'Show All Movies'}
-      </button>
+    <div className="character-detail">
+      <h2>{character.name}</h2>
+      <p>{character.description || 'No description available'}</p>
+      <h3>Comics:</h3>
       <ul>
-        {filteredMovies.map(movie => (
-          <li key={movie.title}>
-            <strong>{movie.title}</strong>
-            {showDescription && `: ${movie.description}`}
-            <button onClick={() => removeMovie(movie.title)}>Remove</button>
-          </li>
-        ))}
+        {comics.length > 0 ? (
+          comics.map(comic => (
+            <li key={comic.id}>{comic.title}</li>
+          ))
+        ) : (
+          <li>No comics available</li>
+        )}
       </ul>
     </div>
   );
 };
 
-export default MoviesList;
+// MarvelCharacters component
+const MarvelCharacters = () => {
+  const [characters, setCharacters] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedCharacter, setSelectedCharacter] = useState(null); // State for selected character
+
+  useEffect(() => {
+    const fetchCharacters = async () => {
+      try {
+        const responses = await Promise.all(
+          characterList.map(hero => 
+            axios.get(`https://gateway.marvel.com/v1/public/characters`, {
+              params: {
+                ts: timestamp,
+                apikey: publicKey,
+                hash: hash,
+                name: hero
+              }
+            })
+          )
+        );
+        const data = responses.map(response => {
+          if (response.data && response.data.data.results.length > 0) {
+            return response.data.data.results[0];
+          } else {
+            return null;
+          }
+        }).filter(Boolean); // Filters out any null values
+
+        setCharacters(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching data:', err.response ? err.response.data : err.message);
+        setError(err);
+        setLoading(false);
+      }
+    };
+
+    fetchCharacters();
+  }, []);
+
+  const handleCharacterClick = async (characterId) => {
+    try {
+      const response = await axios.get(`https://gateway.marvel.com/v1/public/characters/${characterId}`, {
+        params: {
+          ts: timestamp,
+          apikey: publicKey,
+          hash: hash,
+        }
+      });
+      const characterData = response.data.data.results[0];
+      setSelectedCharacter(characterData); // Update the selected character state
+    } catch (err) {
+      console.error('Error fetching character details:', err);
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  return (
+    <div className="container">
+      <h1 className="h1">Marvel Characters</h1>
+      <div className="grid">
+        {characters.map(character => (
+          character && (
+            <div className="grid-item" key={character.id} onClick={() => handleCharacterClick(character.id)}>
+              <div className="text-container">
+                <h2 className="h2">{character.name}</h2>
+              </div>
+              <img className="img"
+                src={`${character.thumbnail.path}.${character.thumbnail.extension}`} 
+                alt={character.name} 
+                style={{ width: '100%' }}
+              />
+            </div>
+          )
+        ))}
+      </div>
+
+      {/* Render the CharacterDetail component when a character is selected */}
+      {selectedCharacter && <CharacterDetail character={selectedCharacter} />}
+    </div>
+  );
+};
+
+export default MarvelCharacters;
