@@ -6,7 +6,7 @@ import BrowseCharacters from './BrowseCharacters';
 import CharacterDetails from './CharacterDetails';
 import Comics from './Comics';
 
-const TempMain = () => {
+const Main = () => {
   return (
     <Router>
       <Navbar />
@@ -22,4 +22,4 @@ const TempMain = () => {
   );
 };
 
-export default TempMain;
+export default Main;

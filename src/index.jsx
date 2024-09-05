@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TempMain from './TempMain'; 
+import Main from './Main'; 
 import './App.css'; // Import global styles if any
 
 // Render the Main component into the root div in index.html
