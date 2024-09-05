@@ -10,14 +10,14 @@ const TempMain = () => {
   return (
     <Router>
       <Navbar />
-      <main>
+    
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/browse-characters" element={<BrowseCharacters />} />
           <Route path="/character-details" element={<CharacterDetails />} />
           <Route path="/comics" element={<Comics />} />
         </Routes>
-      </main>
+    
     </Router>
   );
 };
