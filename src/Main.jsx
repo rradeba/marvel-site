@@ -5,6 +5,7 @@ import Home from './Home';
 import BrowseCharacters from './BrowseCharacters';
 import CharacterDetails from './CharacterDetails';
 import Comics from './Comics';
+import NotFound from './NotFound';
 
 const Main = () => {
   return (
