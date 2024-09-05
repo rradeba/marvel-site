@@ -18,9 +18,6 @@ const Navbar = () => {
         <li>
           <NavLink to="/comics" activeClassName="active">Comics</NavLink>
         </li>
-        <li>
-          <NavLink to="/not-found" activeClassName="active">Comics</NavLink>
-        </li>
       </ul>
     </nav>
   );
