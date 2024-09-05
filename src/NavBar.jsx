@@ -13,7 +13,13 @@ const Navbar = () => {
           <NavLink to="/browse-characters" activeClassName="active">Browse Characters</NavLink>
         </li>
         <li>
+          <NavLink to="/character-details" activeClassName="active">Character Details</NavLink>
+        </li>
+        <li>
           <NavLink to="/comics" activeClassName="active">Comics</NavLink>
+        </li>
+        <li>
+          <NavLink to="/not-found" activeClassName="active">Comics</NavLink>
         </li>
       </ul>
     </nav>

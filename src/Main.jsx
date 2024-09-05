@@ -16,6 +16,7 @@ const Main = () => {
           <Route path="/browse-characters" element={<BrowseCharacters />} />
           <Route path="/character-details" element={<CharacterDetails />} />
           <Route path="/comics" element={<Comics />} />
+          <Route path="*" element={<NotFound />} /> 
         </Routes>
     
     </Router>

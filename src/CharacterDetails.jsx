@@ -66,25 +66,18 @@ const CharacterList = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="container">
+    <div className="character-detail">
       <h1 className="h1">Marvel Characters</h1>
-      <div className="grid">
+      <ul className="grid">
         {characters.map(character => (
           character && (
-            <div className="grid-item" key={character.id}>
-              <div className="text-container">
+            <li key={character.id}>
                 <h2 className="h2">{character.name}</h2>
                 <p>{character.description || 'No description available'}</p>
-              </div>
-              <img className="img"
-                src={`${character.thumbnail.path}.${character.thumbnail.extension}`} 
-                alt={character.name} 
-                style={{ width: '100%' }}
-              />
-            </div>
+            </li>
           )
         ))}
-      </div>
+      </ul>
     </div>
   );
 };
