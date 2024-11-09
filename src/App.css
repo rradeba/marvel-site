@@ -89,5 +89,89 @@ nav a {
 
 nav .active {
   font-weight: bold;
-  color: blue; /* Or any color to highlight the active link */
+  color: blue; 
+  
+}
+
+
+
+.comics-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.comics-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+
+.comics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 0 10px;
+}
+
+
+.comics-item {
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+
+.comics-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+.comics-character-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+
+.comics-list {
+  margin-top: 20px;
+}
+
+
+.comics-list-ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+
+.comics-list-item {
+  background-color: #fff;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.comics-title-item {
+  font-size: 1.1rem;
+  font-weight: normal;
+  color: #555;
+  margin: 0;
+}
+
+
+.no-comics-msg {
+  font-style: italic;
+  color: #888;
+  text-align: center;
 }
