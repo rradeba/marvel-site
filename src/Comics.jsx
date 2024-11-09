@@ -30,7 +30,7 @@ const Comics = () => {
   useEffect(() => {
     const fetchComics = async () => {
       try {
-        
+        // Fetch characters and comics
         const responses = await Promise.all(
           characterList.map(hero => 
             axios.get(`https://gateway.marvel.com/v1/public/characters`, {
@@ -44,12 +44,12 @@ const Comics = () => {
           )
         );
 
-       
+        // Extract comic names for each character
         const comicsData = await Promise.all(
           responses.map(async (response) => {
             if (response.data && response.data.data.results.length > 0) {
               const character = response.data.data.results[0];
-              
+              // Fetch comics for the character
               const comicsResponse = await axios.get(`${character.resourceURI}/comics`, {
                 params: {
                   ts: timestamp,
@@ -58,9 +58,12 @@ const Comics = () => {
                 }
               });
 
+              // Get only the comic titles
+              const comicTitles = comicsResponse.data.data.results.map(comic => comic.title);
+              
               return {
                 name: character.name,
-                comics: comicsResponse.data.data.results
+                comics: comicTitles
               };
             } else {
               return { name: '', comics: [] };
@@ -93,10 +96,9 @@ const Comics = () => {
             <div className="comics-list">
               {characterComics.comics.length > 0 ? (
                 <ul>
-                  {characterComics.comics.map(comic => (
-                    <li key={comic.id}>
-                      <h3>{comic.title}</h3>
-                      <p>{comic.description || 'No description available'}</p>
+                  {characterComics.comics.map((comic, i) => (
+                    <li key={i}>
+                      <h3>{comic}</h3>
                     </li>
                   ))}
                 </ul>
