@@ -66,19 +66,30 @@ const CharacterList = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="character-detail">
-      <h1 className="h1">Marvel Characters</h1>
-      <ul className="grid">
-        {characters.map(character => (
-          character && (
-            <li key={character.id}>
-                <h2 className="h2">{character.name}</h2>
-                <p>{character.description || 'No description available'}</p>
-            </li>
-          )
-        ))}
-      </ul>
-    </div>
+    <div className="comics-container">
+  <h1 className="comics-title">Marvel Comics</h1>
+  <div className="comics-grid">
+    {comics.map((characterComics, index) => (
+      <div className="comics-item" key={index}>
+        <h2 className="comics-character-name">{characterComics.name}</h2>
+        <div className="comics-list">
+          {characterComics.comics.length > 0 ? (
+            <ul className="comics-list-ul">
+              {characterComics.comics.map((comic, i) => (
+                <li className="comics-list-item" key={i}>
+                  <h3 className="comics-title-item">{comic}</h3>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="no-comics-msg">No comics available for this character.</p>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
   );
 };
 

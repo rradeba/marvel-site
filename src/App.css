@@ -128,10 +128,7 @@ nav .active {
 }
 
 
-.comics-item:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-}
+
 
 
 .comics-character-name {
@@ -170,8 +167,3 @@ nav .active {
 }
 
 
-.no-comics-msg {
-  font-style: italic;
-  color: #888;
-  text-align: center;
-}
