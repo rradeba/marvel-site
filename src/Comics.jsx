@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import md5 from 'md5';
 
-
+// API keys and configuration
 const publicKey = import.meta.env.VITE_PUBLIC_KEY;
 const privateKey = import.meta.env.VITE_PRIVATE_KEY;
 const timestamp = Date.now();
 const hash = md5(timestamp + privateKey + publicKey);
 
-
+// Marvel heroes to fetch
 const characterList = [
     "Iron Man",
     "Thor",
@@ -30,7 +30,7 @@ const Comics = () => {
   useEffect(() => {
     const fetchComics = async () => {
       try {
-        // Fetch comics for each character
+        
         const responses = await Promise.all(
           characterList.map(hero => 
             axios.get(`https://gateway.marvel.com/v1/public/characters`, {
@@ -44,12 +44,13 @@ const Comics = () => {
           )
         );
 
-        
+       
         const comicsData = await Promise.all(
           responses.map(async (response) => {
             if (response.data && response.data.data.results.length > 0) {
               const character = response.data.data.results[0];
-              const comicsResponse = await axios.get(`${character.urls[0].url}/comics`, {
+              
+              const comicsResponse = await axios.get(`${character.resourceURI}/comics`, {
                 params: {
                   ts: timestamp,
                   apikey: publicKey,
